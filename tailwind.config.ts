@@ -42,7 +42,9 @@ const config: Config = {
       fontWeight: Object.fromEntries(
         Object.entries(tokens.font.weight).map(([key, value]) => [key, String(value)])
       ) as Record<string, string>,
-      lineHeight: tokens.font.leading,
+      lineHeight: Object.fromEntries(
+        Object.entries(tokens.font.leading).map(([key, value]) => [key, String(value)])
+      ) as Record<string, string>,
       transitionDuration: {
         fast: tokens.motion.fast,
         base: tokens.motion.base,
