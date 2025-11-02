@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${LEANCLOUD_APP_PORT:-3000} -H 0.0.0.0",
+    "start": "next start -p $LEANCLOUD_APP_PORT -H 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
     "export": "next build",
