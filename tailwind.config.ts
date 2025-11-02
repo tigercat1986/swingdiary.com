@@ -18,7 +18,7 @@ const config: Config = {
         },
         fg: tokens.color.fg,
         bg: tokens.color.bg,
-        borderc: tokens.color.border,
+        border: tokens.color.border,
         accent: tokens.color.accent,
       },
       borderRadius: {
@@ -39,9 +39,15 @@ const config: Config = {
       fontFamily: {
         sans: (tokens.font.family.sans as string).split(',').map((f: string) => f.trim()),
       },
-      fontWeight: tokens.font.weight,
+      fontWeight: Object.fromEntries(
+        Object.entries(tokens.font.weight).map(([key, value]) => [key, String(value)])
+      ) as Record<string, string>,
       lineHeight: tokens.font.leading,
-      transitionDuration: tokens.motion,
+      transitionDuration: {
+        fast: tokens.motion.fast,
+        base: tokens.motion.base,
+        slow: tokens.motion.slow,
+      },
       transitionTimingFunction: {
         ease: tokens.motion.ease,
       },

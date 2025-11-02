@@ -2,8 +2,8 @@
   "color": {
     "brand": { "primary": "#22C55E", "primaryFg": "#0B0F14", "secondary": "#16A34A" },
     "fg": { "default": "#E5E7EB", "muted": "#A3A9B6", "subtle": "#94A3B8", "inverse": "#0B0F14" },
-    "bg": { "page": "#0B0F14", "elevated": "#0F141B", "glass": "rgba(17, 24, 39, 0.6)" },
-    "border": { "soft": "#1F2A37", "strong": "#2B3542" },
+    "bg": { "page": "#0B0F14", "elevated": "#0F141B", "subtle": "#151A20", "glass": "rgba(17, 24, 39, 0.6)" },
+    "border": { "soft": "#1F2A37", "default": "#2B3542", "strong": "#2B3542" },
     "accent": { "blue": "#60A5FA", "yellow": "#F59E0B" }
   },
   "radius": { "sm": "12px", "md": "16px", "lg": "20px", "xl": "24px", "pill": "999px" },

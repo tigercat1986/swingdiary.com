@@ -86,7 +86,7 @@ export function SiteFooter() {
 
         {/* Copyright */}
         <div className="border-t border-fg-subtle pt-lg">
-          <p className="text-fg-subtle startbase">
+          <p className="text-fg-subtle text-base">
             © {currentYear} 网球拍档 Tennis Mate. All rights reserved.
           </p>
         </div>
