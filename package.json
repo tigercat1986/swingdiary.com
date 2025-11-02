@@ -2,11 +2,16 @@
   "name": "tennis-mate-website",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <21"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "start": "next start -p ${LEANCLOUD_APP_PORT:-3000} -H 0.0.0.0",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "export": "next export",
     "test": "vitest"
   },
   "dependencies": {
