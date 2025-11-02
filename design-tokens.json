@@ -1,0 +1,29 @@
+{
+  "color": {
+    "brand": { "primary": "#22C55E", "primaryFg": "#0B0F14", "secondary": "#16A34A" },
+    "fg": { "default": "#E5E7EB", "muted": "#A3A9B6", "subtle": "#94A3B8", "inverse": "#0B0F14" },
+    "bg": { "page": "#0B0F14", "elevated": "#0F141B", "glass": "rgba(17, 24, 39, 0.6)" },
+    "border": { "soft": "#1F2A37", "strong": "#2B3542" },
+    "accent": { "blue": "#60A5FA", "yellow": "#F59E0B" }
+  },
+  "radius": { "sm": "12px", "md": "16px", "lg": "20px", "xl": "24px", "pill": "999px" },
+  "shadow": {
+    "sm": "0 1px 2px rgba(0,0,0,.25)",
+    "md": "0 6px 20px rgba(0,0,0,.35)",
+    "lg": "0 20px 40px rgba(0,0,0,.45)"
+  },
+  "space": { "xs": "8px", "sm": "12px", "md": "16px", "lg": "24px", "xl": "32px", "xxl": "56px" },
+  "font": {
+    "family": { "sans": "'Inter', -apple-system, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji'" },
+    "size": {
+      "xs": "12px", "sm": "14px", "md": "16px", "lg": "18px",
+      "xl": "20px", "h6": "clamp(20px, 2vw, 24px)", "h5": "clamp(24px, 3vw, 28px)",
+      "h4": "clamp(28px, 4vw, 32px)", "h3": "clamp(34px, 5vw, 40px)",
+      "h2": "clamp(40px, 6vw, 52px)", "h1": "clamp(48px, 8vw, 64px)"
+    },
+    "weight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700 },
+    "leading": { "tight": 1.15, "snug": 1.25, "normal": 1.45 }
+  },
+  "motion": { "fast": "150ms", "base": "240ms", "slow": "400ms", "ease": "cubic-bezier(.2,.8,.2,1)" },
+  "container": { "max": "1200px", "grid": 12, "gutter": "24px" }
+}

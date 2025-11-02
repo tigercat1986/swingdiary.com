@@ -1,0 +1,114 @@
+{
+  "hero": {
+    "title": "和大自然一起，记录每次挥拍的精彩瞬间",
+    "subtitle": "Apple Watch 数据自动导入 · 专业比分速记 · AI 生成比赛集锦",
+    "primaryCTA": "立即下载",
+    "secondaryCTA": "了解更多",
+    "primaryCTALink": "#download",
+    "secondaryCTALink": "#features"
+  },
+  "features": [
+    {
+      "icon": "Activity",
+      "title": "自动导入 Apple Watch 数据",
+      "description": "无需手动输入，Apple Watch 自动记录心率、卡路里、运动时长等关键数据",
+      "link": "#"
+    },
+    {
+      "icon": "PencilRuler",
+      "title": "专业比分速记",
+      "description": "支持抢七、双打、自定义赛制，快速记录每分每局的详细比分",
+      "link": "#"
+    },
+    {
+      "icon": "Calendar",
+      "title": "网球日历",
+      "description": "记录每次打球时间，生成打球统计与趋势分析",
+      "link": "#"
+    },
+    {
+      "icon": "User",
+      "title": "网球名片",
+      "description": "生成个性化网球名片，展示你的打球数据与成就",
+      "link": "#"
+    },
+    {
+      "icon": "Sparkles",
+      "title": "AI 生成集锦",
+      "description": "智能识别精彩回合，自动生成 HL 比赛集锦视频",
+      "link": "#"
+    },
+    {
+      "icon": "Users",
+      "title": "约球社区",
+      "description": "发现附近的球友，创建约球计划，找到你的最佳拍档",
+      "link": "#"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "张先生",
+      "role": "业余网球爱好者",
+      "content": "自从用了 Tennis Mate，我再也不用担心忘记记录比分了。Apple Watch 的数据同步特别方便！",
+      "rating": 5
+    },
+    {
+      "name": "李女士",
+      "role": "网球教练",
+      "content": "作为教练，我很喜欢用这款 App 记录学员的比赛数据，AI 生成集锦功能让家长能清楚看到孩子的进步。",
+      "rating": 5
+    }
+  ],
+  "pricing": {
+    "title": "免费体验，解锁更多精彩",
+    "subtitle": "基础功能免费使用，高级功能按需订阅",
+    "plans": [
+      {
+        "name": "免费版",
+        "price": "¥0",
+        "features": [
+          "Apple Watch 数据同步",
+          "基础比分记录",
+          "比赛统计",
+          "网球日历"
+        ]
+      },
+      {
+        "name": "专业版",
+        "price": "¥9.9",
+        "period": "/月",
+        "features": [
+          "所有免费功能",
+          "AI 生成比赛集锦",
+          "高级数据分析",
+          "无限比赛记录",
+          "专业统计报表",
+          "优先技术支持"
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {
+      "question": "Apple Watch 数据如何导入？",
+      "answer": "App 会自动识别 Apple Watch 上记录的网球运动数据，包括心率、卡路里、运动时长等信息，无需手动操作。"
+    },
+    {
+      "question": "支持哪些比赛格式？",
+      "answer": "支持单打、双打、抢七等常见赛制，也可自定义比赛规则记录特殊场景。"
+    },
+    {
+      "question": "AI 集锦功能如何使用？",
+      "answer": "在比赛过程中，App 会自动识别精彩回合，赛后一键生成 HL 集锦视频，支持自定义音乐和剪辑。"
+    },
+    {
+      "question": "数据会同步到云端吗？",
+      "answer": "是的，所有数据会安全地同步到 iCloud，可在不同设备间无缝切换。"
+    },
+    {
+      "question": "支持哪些设备？",
+      "answer": "目前支持 iPhone 和 Apple Watch，后续会推出 iPad 和 Android 版本。"
+    }
+  ]
+}
+

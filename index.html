@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网球拍档 - Apple Watch 数据自动导入，专业比分速记</title>
+    <meta name="description" content="网球拍档是一款专业的网球App，支持自动导入Apple Watch数据、专业比分速记、网球日历、AI生成比赛集锦。">
+    <meta name="keywords" content="网球,Apple Watch,比分记录,网球App,网球日历,AI集锦">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --brand-primary: #22C55E;
+            --brand-primary-fg: #0B0F14;
+            --brand-secondary: #16A34A;
+            --accent-blue: #60A5FA;
+            --accent-yellow: #F59E0B;
+            /* 浅色风格 - 文字颜色 */
+            --fg-default: #0F172A;
+            --fg-muted: #475569;
+            --fg-subtle: #64748B;
+            --fg-inverse: #FFFFFF;
+            /* 浅色风格 - 背景色 */
+            --bg-page: #FFFFFF;
+            --bg-subtle: #F8FAFC;
+            --bg-elevated: #F1F5F9;
+            --bg-glass: rgba(255, 255, 255, 0.8);
+            --border-default: #E2E8F0;
+            --border-strong: #CBD5E1;
+        }
+        
+        body {
+            font-family: 'Manrope', 'Poppins', -apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--fg-default);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* App 名称使用更专业的字体 */
+        .app-name {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .app-name-english {
+            font-family: 'Manrope', -apple-system, sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        
+        /* 统一动效：transition-[transform,opacity] duration-[tokens.motion.base] ease-[tokens.motion.ease] */
+        .animate-fade-in {
+            animation: fadeIn 240ms cubic-bezier(.2,.8,.2,1) forwards;
+            opacity: 0;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 240ms cubic-bezier(.2,.8,.2,1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 240ms cubic-bezier(.2,.8,.2,1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 240ms cubic-bezier(.2,.8,.2,1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 网格纹理背景 - 浅色风格 */
+        .grid-texture {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-color: var(--bg-page);
+        }
+        
+        /* 流式字号 - 使用 clamp */
+        h1 {
+            font-size: clamp(48px, 8vw, 64px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+        
+        h2 {
+            font-size: clamp(40px, 6vw, 52px);
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            line-height: 1.15;
+        }
+        
+        h3 {
+            font-size: clamp(34px, 5vw, 40px);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            line-height: 1.25;
+        }
+        
+        h4 {
+            font-size: clamp(28px, 4vw, 32px);
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        
+        h5 {
+            font-size: clamp(24px, 3vw, 28px);
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        
+        h6 {
+            font-size: clamp(20px, 2vw, 24px);
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        
+        /* 副标题与段落 */
+        .subtitle {
+            font-weight: 400;
+            line-height: 1.45;
+        }
+        
+        .subtitle-medium {
+            font-weight: 500;
+            line-height: 1.45;
+        }
+        
+        p {
+            line-height: 1.45;
+        }
+        
+        .card-hover {
+            transition: transform 240ms cubic-bezier(.2,.8,.2,1), opacity 240ms cubic-bezier(.2,.8,.2,1), box-shadow 240ms cubic-bezier(.2,.8,.2,1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Glass 卡片样式 - 浅色风格 */
+        .glass-card {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.08),
+                0 1px 3px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            transition: transform 240ms cubic-bezier(.2,.8,.2,1), 
+                        opacity 240ms cubic-bezier(.2,.8,.2,1), 
+                        box-shadow 240ms cubic-bezier(.2,.8,.2,1),
+                        background 240ms cubic-bezier(.2,.8,.2,1);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 
+                0 12px 32px rgba(0, 0, 0, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+        
+        /* 主按钮样式 */
+        .btn-primary {
+            background-color: var(--brand-primary);
+            color: var(--brand-primary-fg);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+            transition: opacity 240ms cubic-bezier(.2,.8,.2,1), transform 240ms cubic-bezier(.2,.8,.2,1);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        /* Focus styles for accessibility - WCAG AA 对比度 - 浅色风格 */
+        *:focus-visible {
+            outline: 2px solid var(--brand-primary);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+        
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--brand-primary);
+            outline-offset: 2px;
+        }
+        
+        /* 次按钮样式 */
+        .btn-outline {
+            border: 2px solid var(--brand-primary);
+            color: var(--brand-primary);
+            background: transparent;
+            transition: opacity 240ms cubic-bezier(.2,.8,.2,1), transform 240ms cubic-bezier(.2,.8,.2,1), background-color 240ms cubic-bezier(.2,.8,.2,1);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(34, 197, 94, 0.08);
+            border-color: var(--brand-secondary);
+        }
+        
+        .btn-ghost {
+            color: var(--fg-default);
+            background: transparent;
+            transition: opacity 240ms cubic-bezier(.2,.8,.2,1), transform 240ms cubic-bezier(.2,.8,.2,1), background-color 240ms cubic-bezier(.2,.8,.2,1);
+        }
+        
+        .btn-ghost:hover {
+            background-color: rgba(15, 23, 42, 0.05);
+        }
+        
+        .gradient-bg {
+            background-image: url('public/images/hero_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        
+        /* 桌面端使用固定背景，移动端滚动避免性能问题 */
+        @media (min-width: 768px) {
+            .gradient-bg {
+                background-attachment: fixed;
+            }
+        }
+        
+        /* 确保所有内容在背景之上 */
+        .gradient-bg > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .gradient-bg .container {
+            z-index: 2;
+        }
+        
+        /* 移除或减弱 blob 效果，避免影响手机界面显示 */
+        .blob-1 {
+            display: none;
+        }
+        
+        .blob-2 {
+            display: none;
+        }
+        
+        /* Hero 设备框 - 真实 iPhone 边框风格，支持多种屏幕尺寸 */
+        .iphone-frame {
+            background: linear-gradient(145deg, #1A1A1A 0%, #2D2D2D 50%, #1A1A1A 100%);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 3px rgba(0, 0, 0, 0.6),
+                inset 0 1px 2px rgba(255, 255, 255, 0.12),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+            border-radius: 32px;
+            position: relative;
+            padding: 12px;
+            width: 100%;
+            max-width: min(420px, 35vw);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1290 / 2796;
+        }
+        
+        /* 超大屏幕优化 */
+        @media (min-width: 2560px) {
+            .iphone-frame {
+                max-width: 480px;
+            }
+        }
+        
+        /* 2K 显示器优化 (2560x1440) */
+        @media (min-width: 1920px) and (max-width: 2559px) {
+            .iphone-frame {
+                max-width: 450px;
+            }
+        }
+        
+        /* 大屏幕优化 */
+        @media (min-width: 1600px) and (max-width: 1919px) {
+            .iphone-frame {
+                max-width: 420px;
+            }
+        }
+        
+        /* 标准桌面优化 */
+        @media (min-width: 1024px) and (max-width: 1599px) {
+            .iphone-frame {
+                max-width: 380px;
+            }
+        }
+        
+        /* 设备框内阴影与轻微反光渐变 - 真实 iPhone 风格 */
+        .iphone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* 移动端改为上下排 */
+        @media (max-width: 768px) {
+            .iphone-container {
+                order: 2;
+            }
+        .hero-content {
+            order: 1;
+        }
+    }
+    
+    /* Hero 内容区域样式优化 */
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    /* Hero 区域文字颜色 - 白色，带阴影增强可读性 */
+    .hero-content h1 {
+        color: #FFFFFF;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+    .hero-content .subtitle {
+        color: #FFFFFF;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    /* iPhone 背景容器 - 增加上下间距，确保居中对齐，响应式优化 */
+    .iphone-container {
+            padding: clamp(40px, 5vw, 80px) clamp(20px, 3vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            z-index: 20;
+        }
+        
+        .iphone-screen {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1290 / 2796;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        #screenshot-carousel {
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        
+        #screenshot-carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            margin: 0;
+            padding: 0;
+            flex-shrink: 0;
+        }
+        
+        /* iPhone 动态岛 (Dynamic Island) - 浅色风格 */
+        .dynamic-island {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dynamic-island::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            background: #1a1a1a;
+            border-radius: 16px;
+        }
+        
+        /* 音量按键 */
+        .iphone-button {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+        }
+        
+        .volume-up {
+            left: -5px;
+            top: 20%;
+            width: 5px;
+            height: 32px;
+        }
+        
+        .volume-down {
+            left: -5px;
+            top: 28%;
+            width: 5px;
+            height: 32px;
+        }
+        
+        .power-button {
+            right: -5px;
+            top: 20%;
+            width: 5px;
+            height: 60px;
+        }
+        
+        /* App Logo 样式 */
+        .app-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+        }
+        
+        .hero-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            margin-bottom: 24px;
+        }
+        
+    </style>
+</head>
+<body class="grid-texture">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 w-full" style="background: var(--bg-glass); backdrop-filter: blur(16px); box-shadow: 0 2px 8px rgba(0,0,0,.06); border-bottom: 1px solid var(--border-default);">
+        <nav class="container max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img 
+                    src="public/images/icon.png" 
+                    alt="网球拍档 Logo" 
+                    class="app-logo" 
+                    width="48" 
+                    height="48" 
+                    loading="eager" 
+                    fetchpriority="high"
+                />
+                <span class="text-2xl font-bold app-name" style="color: var(--fg-default);">网球拍档<span class="text-lg font-semibold opacity-70 app-name-english" style="margin-left: 0.5rem;">Tennis Mate</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#features" class="transition-colors" style="color: var(--fg-default);">功能特色</a>
+                <a href="#download" class="transition-colors" style="color: var(--fg-default);">下载</a>
+            </div>
+            <button class="md:hidden p-2 transition-colors" style="color: var(--fg-default);" onclick="toggleMobileMenu()" aria-label="打开菜单">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden" style="background: var(--bg-glass); backdrop-filter: blur(12px); border-top: 1px solid var(--border-default);">
+            <div class="container max-w-6xl mx-auto px-4 py-4 flex flex-col gap-4">
+                <a href="#features" class="transition-colors py-2" style="color: var(--fg-default);">功能特色</a>
+                <a href="#download" class="transition-colors py-2" style="color: var(--fg-default);">下载</a>
+                <button 
+                    class="px-8 py-4 rounded-lg text-lg font-medium w-full mt-2 glass-card hover:opacity-90 transition-opacity duration-240ms"
+                    style="color: var(--fg-default); border: 1px solid var(--border-default);"
+                    aria-label="从 App Store 下载"
+                    type="button"
+                >
+                    <svg class="w-6 h-6 mr-2 inline" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    App Store 下载
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden gradient-bg">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+        
+        <div class="container max-w-6xl mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="animate-slide-in-left hero-content">
+                    <p class="text-xl md:text-2xl subtitle mb-6">
+                        记录每次挥拍的精彩瞬间
+                    </p>
+                    <h1 class="mb-8">
+                        Apple Watch 数据自动导入 · 专业比分速记 · 网球日历
+                    </h1>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button 
+                            class="px-8 py-4 rounded-lg text-lg font-medium glass-card hover:opacity-90 transition-opacity duration-240ms"
+                            style="color: var(--fg-default); border: 1px solid var(--border-default);"
+                            aria-label="从 App Store 下载"
+                            type="button"
+                        >
+                            <svg class="w-6 h-6 mr-2 inline" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            </svg>
+                            App Store 下载
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="animate-slide-in-right iphone-container" style="position: relative; z-index: 20;">
+                    <div class="iphone-frame">
+                        <!-- iPhone 物理按键 -->
+                        <div class="iphone-button volume-up"></div>
+                        <div class="iphone-button volume-down"></div>
+                        <div class="iphone-button power-button"></div>
+                        
+                        <!-- 屏幕区域 -->
+                        <div class="iphone-screen h-full">
+                            <!-- 动态岛 -->
+                            <div class="dynamic-island"></div>
+                            
+                            <!-- 截图轮播 -->
+                            <div id="screenshot-carousel" class="h-full flex transition-transform duration-500 ease-out">
+                                <img 
+                                    src="public/images/home.PNG" 
+                                    alt="网球拍档应用主页截图，显示日历和比赛统计" 
+                                    class="w-full h-full object-cover flex-shrink-0"
+                                    loading="lazy"
+                                    width="1290"
+                                    height="2796"
+                                />
+                                <img 
+                                    src="public/images/profile.PNG" 
+                                    alt="网球拍档个人资料页面截图" 
+                                    class="w-full h-full object-cover flex-shrink-0"
+                                    loading="lazy"
+                                    width="1290"
+                                    height="2796"
+                                />
+                                <img 
+                                    src="public/images/add match.PNG" 
+                                    alt="网球拍档添加比赛记录页面截图" 
+                                    class="w-full h-full object-cover flex-shrink-0"
+                                    loading="lazy"
+                                    width="1290"
+                                    height="2796"
+                                />
+                                <img 
+                                    src="public/images/share.PNG" 
+                                    alt="网球拍档分享网球名片页面截图" 
+                                    class="w-full h-full object-cover flex-shrink-0"
+                                    loading="lazy"
+                                    width="1290"
+                                    height="2796"
+                                />
+                            </div>
+                            
+                            <!-- 指示器 -->
+                            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 px-3 py-2 rounded-full" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                <div class="w-2 h-2 rounded-full bg-white/80 carousel-dot active" onclick="goToSlide(0)"></div>
+                                <div class="w-2 h-2 rounded-full bg-white/40 carousel-dot" onclick="goToSlide(1)"></div>
+                                <div class="w-2 h-2 rounded-full bg-white/40 carousel-dot" onclick="goToSlide(2)"></div>
+                                <div class="w-2 h-2 rounded-full bg-white/40 carousel-dot" onclick="goToSlide(3)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="mb-6">核心功能</h2>
+                <p class="text-xl subtitle max-w-2xl mx-auto" style="color: var(--fg-muted);">为网球爱好者量身定制的专业工具</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card card-hover p-6 animate-slide-up" style="animation-delay: 0.1s" role="article" aria-label="自动导入 Apple Watch 数据功能">
+                    <h3 class="mb-3">自动导入 Apple Watch 数据</h3>
+                    <p style="color: var(--fg-muted);" class="subtitle">无需手动输入，Apple Watch 自动记录心率、卡路里、运动时长等关键数据</p>
+                </div>
+
+                <div class="glass-card card-hover p-6 animate-slide-up" style="animation-delay: 0.2s" role="article" aria-label="专业比分速记功能">
+                    <h3 class="mb-3">专业比分速记</h3>
+                    <p style="color: var(--fg-muted);" class="subtitle">支持抢七、双打、自定义赛制，快速记录每分每局的详细比分</p>
+                </div>
+
+                <div class="glass-card card-hover p-6 animate-slide-up" style="animation-delay: 0.3s" role="article" aria-label="网球日历功能">
+                    <h3 class="mb-3">网球日历</h3>
+                    <p style="color: var(--fg-muted);" class="subtitle">记录每次打球时间，生成打球统计与趋势分析</p>
+                </div>
+
+                <div class="glass-card card-hover p-6 animate-slide-up" style="animation-delay: 0.4s" role="article" aria-label="网球名片功能">
+                    <h3 class="mb-3">网球名片</h3>
+                    <p style="color: var(--fg-muted);" class="subtitle">生成个性化网球名片，展示你的打球数据与成就</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24" style="background: var(--bg-subtle);">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: var(--fg-default);">用户评价</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="rounded-lg p-6 animate-slide-up glass-card" style="animation-delay: 0.1s">
+                    <div class="flex gap-1 mb-4">
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    </div>
+                        <p style="color: var(--fg-default);" class="leading-relaxed mb-4">自从用了 Tennis Mate，我再也不用担心忘记记录比分了。Apple Watch 的数据同步特别方便！</p>
+                    <div>
+                        <p class="font-semibold" style="color: var(--fg-default);">张先生</p>
+                        <p class="text-sm" style="color: var(--fg-muted);">业余网球爱好者</p>
+                    </div>
+                </div>
+
+                <div class="rounded-lg p-6 animate-slide-up glass-card" style="animation-delay: 0.2s">
+                    <div class="flex gap-1 mb-4">
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    </div>
+                        <p style="color: var(--fg-default);" class="leading-relaxed mb-4">作为教练，我很喜欢用这款 App 记录学员的比赛数据，比分记录功能让家长能清楚看到孩子的进步。</p>
+                    <div>
+                        <p class="font-semibold" style="color: var(--fg-default);">李女士</p>
+                        <p class="text-sm" style="color: var(--fg-muted);">网球教练</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="py-24" style="background: var(--bg-subtle);">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="mb-6">立即下载</h2>
+                <p class="text-xl subtitle max-w-2xl mx-auto" style="color: var(--fg-muted);">体验专业的网球管理工具</p>
+            </div>
+
+            <div class="flex justify-center items-center gap-6 animate-slide-up">
+                <button 
+                    class="px-8 py-4 rounded-lg text-lg font-medium glass-card hover:opacity-90 transition-opacity duration-240ms"
+                    style="color: var(--fg-default); border: 1px solid var(--border-default);"
+                    aria-label="从 App Store 下载"
+                    type="button"
+                >
+                    <svg class="w-6 h-6 mr-2 inline" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    App Store 下载
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="py-16" style="background: var(--bg-elevated);">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4 app-name">网球拍档<span class="text-lg font-semibold opacity-70 app-name-english" style="margin-left: 0.5rem;">Tennis Mate</span></h3>
+                    <p class="mb-6 max-w-md leading-relaxed" style="color: var(--fg-muted);">
+                        记录每次挥拍的精彩瞬间。Apple Watch 数据自动导入，专业比分速记。
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <button class="p-3 rounded-lg transition-colors" style="background: var(--bg-elevated);" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='var(--bg-elevated)'">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            </svg>
+                        </button>
+                        <button class="p-3 rounded-lg transition-colors" style="background: var(--bg-elevated);" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='var(--bg-elevated)'">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">产品</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="transition-colors" style="color: var(--fg-muted);" onmouseover="this.style.color='var(--fg-default)'" onmouseout="this.style.color='var(--fg-muted)'">功能特色</a></li>
+                        <li><a href="#download" class="transition-colors" style="color: var(--fg-muted);" onmouseover="this.style.color='var(--fg-default)'" onmouseout="this.style.color='var(--fg-muted)'">下载</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">支持</h4>
+                    <ul class="space-y-3">
+                        <li><a href="privacy.html" class="transition-colors" style="color: var(--fg-muted);" onmouseover="this.style.color='var(--fg-default)'" onmouseout="this.style.color='var(--fg-muted)'">隐私政策</a></li>
+                        <li><a href="terms.html" class="transition-colors" style="color: var(--fg-muted);" onmouseover="this.style.color='var(--fg-default)'" onmouseout="this.style.color='var(--fg-muted)'">服务条款</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8" style="border-top: 1px solid var(--border-default);">
+                <p style="color: var(--fg-muted);">© 2025 网球拍档 Tennis Mate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.animate-slide-up, .animate-slide-in-left, .animate-slide-in-right').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            observer.observe(el);
+        });
+
+        // Screenshot Carousel
+        let currentSlide = 0;
+        const totalSlides = 4;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            const carousel = document.getElementById('screenshot-carousel');
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update dots
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                if (i === currentSlide) {
+                    dot.classList.remove('bg-white/40');
+                    dot.classList.add('bg-white/80');
+                } else {
+                    dot.classList.remove('bg-white/80');
+                    dot.classList.add('bg-white/40');
+                }
+            });
+        }
+
+        // Auto-play carousel
+        function autoPlayCarousel() {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                goToSlide(currentSlide);
+            }, 4000);
+        }
+
+        // Start auto-play after page load
+        autoPlayCarousel();
+    </script>
+</body>
+</html>
