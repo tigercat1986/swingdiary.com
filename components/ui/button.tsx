@@ -5,15 +5,22 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
+  asChild?: boolean;
+  href?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(
   (
     {
       className,
       variant = "primary",
       size = "md",
       children,
+      asChild,
+      href,
       ...props
     },
     ref
@@ -38,10 +45,41 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg: "px-xl py-lg text-lg",
     };
 
+    const classNames = cn(
+      baseStyles,
+      variants[variant],
+      sizes[size],
+      className
+    );
+
+    // If asChild is true, clone the child element and apply our styles
+    if (asChild && React.isValidElement(children)) {
+      return React.cloneElement(children as React.ReactElement<any>, {
+        className: cn(classNames, (children as React.ReactElement<any>).props?.className),
+        ref,
+        ...props,
+      });
+    }
+
+    // If href is provided, render as anchor
+    if (href) {
+      return (
+        <a
+          href={href}
+          className={classNames}
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </a>
+      );
+    }
+
+    // Default: render as button
     return (
       <button
-        className={cn(baseStyles, variants[variant], sizes[size], className)}
-        ref={ref}
+        className={classNames}
+        ref={ref as React.Ref<HTMLButtonElement>}
         {...props}
       >
         {children}
