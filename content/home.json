@@ -4,7 +4,7 @@
     "subtitle": "Apple Watch 数据自动导入 · 专业比分速记 · AI 生成比赛集锦",
     "primaryCTA": "立即下载",
     "secondaryCTA": "了解更多",
-    "primaryCTALink": "#download",
+    "primaryCTALink": "https://apps.apple.com/app/id6753740438",
     "secondaryCTALink": "#features"
   },
   "features": [
@@ -47,15 +47,15 @@
   ],
   "testimonials": [
     {
-      "name": "张先生",
+      "name": "马场大辉",
       "role": "业余网球爱好者",
-      "content": "自从用了 Tennis Mate，我再也不用担心忘记记录比分了。Apple Watch 的数据同步特别方便！",
+      "content": "自从用了 Swing Diary，我再也不用担心忘记记录比分了。Apple Watch 的数据同步特别方便！",
       "rating": 5
     },
     {
-      "name": "李女士",
-      "role": "网球教练",
-      "content": "作为教练，我很喜欢用这款 App 记录学员的比赛数据，AI 生成集锦功能让家长能清楚看到孩子的进步。",
+      "name": "东莞少爷",
+      "role": "业余网球爱好者",
+      "content": "用这个 App 记录比赛数据真的很方便，每次打完球都能看到详细的统计，还能生成网球名片和球友分享，太棒了！",
       "rating": 5
     }
   ],

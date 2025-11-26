@@ -1,6 +1,6 @@
 {
-  "name": "网球拍档 - Tennis Mate",
-  "short_name": "网球拍档",
+  "name": "挥拍日记 - Swing Diary",
+  "short_name": "挥拍日记",
   "description": "专业网球App，支持Apple Watch数据自动导入、专业比分速记、AI生成比赛集锦",
   "start_url": "/",
   "display": "standalone",

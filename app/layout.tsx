@@ -5,23 +5,23 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin", "latin-ext"] });
 
 export const metadata: Metadata = {
-  title: "网球拍档 - Apple Watch 数据自动导入，专业比分速记",
+  title: "挥拍日记 - Apple Watch 数据自动导入，专业比分速记",
   description:
-    "网球拍档是一款专业的网球App，支持自动导入Apple Watch数据、专业比分速记、网球日历、AI生成比赛集锦。和大自然一起，记录每次挥拍的精彩瞬间。",
+    "挥拍日记是一款专业的网球App，支持自动导入Apple Watch数据、专业比分速记、网球日历、AI生成比赛集锦。和大自然一起，记录每次挥拍的精彩瞬间。",
   keywords: "网球,Apple Watch,比分记录,网球App,网球日历,AI集锦",
-  authors: [{ name: "网球拍档" }],
+  authors: [{ name: "挥拍日记" }],
   openGraph: {
-    title: "网球拍档 - 专业网球App",
+    title: "挥拍日记 - 专业网球App",
     description:
       "自动导入Apple Watch数据，专业比分速记，AI生成比赛集锦",
     url: "https://tennis-mate.app",
-    siteName: "网球拍档",
+    siteName: "挥拍日记",
     locale: "zh_CN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "网球拍档 - 专业网球App",
+    title: "挥拍日记 - 专业网球App",
     description: "自动导入Apple Watch数据，专业比分速记，AI生成比赛集锦",
   },
   robots: {
@@ -47,7 +47,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "网球拍档",
+              name: "挥拍日记",
               applicationCategory: "SportsApplication",
               operatingSystem: "iOS",
               offers: {

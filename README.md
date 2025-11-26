@@ -1,4 +1,4 @@
-# 网球拍档 · Tennis Mate 官方网站
+# 挥拍日记 · Swing Diary 官方网站
 
 官方网站项目，使用 Next.js 15 + Tailwind CSS + shadcn/ui + Framer Motion 构建。
 
@@ -198,5 +198,5 @@ yarn test
 
 ## 许可证
 
-Copyright © 2024 网球拍档 Tennis Mate. All rights reserved.
+Copyright © 2024 挥拍日记 Swing Diary. All rights reserved.
 

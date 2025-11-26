@@ -43,7 +43,7 @@ export function SiteHeader() {
           className="text-2xl font-bold text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-md"
           aria-label="回到首页"
         >
-          网球拍档
+          挥拍日记
         </Link>
 
         {/* Desktop Navigation */}

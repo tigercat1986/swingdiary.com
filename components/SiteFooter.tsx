@@ -27,7 +27,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-xl mb-xl">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold mb-md">网球拍档</h3>
+            <h3 className="text-2xl font-bold mb-md">挥拍日记</h3>
             <p className="text-fg-subtle mb-lg max-w-md leading-normal">
               和大自然一起，记录每次挥拍的精彩瞬间。Apple Watch 数据自动导入，AI 生成比赛集锦。
             </p>
@@ -84,11 +84,29 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Copyright & Legal Info */}
         <div className="border-t border-fg-subtle pt-lg">
-          <p className="text-fg-subtle text-base">
-            © {currentYear} 网球拍档 Tennis Mate. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-md">
+            <div className="flex flex-col gap-xs">
+              <p className="text-fg-subtle text-base">
+                © {currentYear} 挥拍科技. All rights reserved.
+              </p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-xs sm:gap-md text-sm text-fg-subtle">
+                <span>
+                  备案号：<a 
+                    href="https://beian.miit.gov.cn" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-fg-inverse transition-colors duration-base ease"
+                  >
+                    浙ICP备2025204863号-1
+                  </a>
+                </span>
+                <span className="hidden sm:inline">|</span>
+                <span>地址：浙江省杭州市余杭区仓前街道龙园路88号</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
